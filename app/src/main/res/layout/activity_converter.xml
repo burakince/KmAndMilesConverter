@@ -28,6 +28,49 @@
         android:layout_alignBottom="@+id/fromLabel"
         android:layout_toRightOf="@+id/fromLabel"
         android:layout_toEndOf="@+id/fromLabel"
-        android:clickable="true" />
+        android:clickable="true"
+        android:text="0.0"
+        android:textColor="@android:color/black" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:layout_below="@+id/fromLabel"
+        android:layout_toLeftOf="@+id/fromValue"
+        android:layout_toStartOf="@+id/fromValue"
+        android:src="@drawable/switch_types_icon"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="50dp"
+        android:onClick="switchMode" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Km"
+        android:id="@+id/toLabel"
+        android:layout_below="@+id/imageButton"
+        android:layout_toLeftOf="@+id/fromValue"
+        android:layout_toStartOf="@+id/fromValue"
+        android:minWidth="150dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/result"
+        android:layout_alignBottom="@+id/toLabel"
+        android:layout_toRightOf="@+id/toLabel"
+        android:layout_toEndOf="@+id/toLabel"
+        android:editable="false"
+        android:enabled="false"
+        android:text="0"
+        android:textColor="@android:color/black" />
 
 </RelativeLayout>

@@ -2,37 +2,46 @@ package net.burakince.kmandmilesconverter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 public class ConverterActivity extends AppCompatActivity implements View.OnTouchListener {
 
-    private TextView fromValue;
+    private final DecimalFormat formatValue = new DecimalFormat("##.##");
+
+    private TextView fromLabel;
+    private EditText fromValue;
+    private TextView toLabel;
+    private EditText result;
     private AlertDialog alertDialog;
+    private Mode mode = Mode.MILES_TO_KM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_converter);
 
-        fromValue = (TextView) findViewById(R.id.fromValue);
+        fromLabel = (TextView) findViewById(R.id.fromLabel);
+        fromValue = (EditText) findViewById(R.id.fromValue);
+        toLabel = (TextView) findViewById(R.id.toLabel);
+        result = (EditText) findViewById(R.id.result);
 
-        fromValue.setText("0.0");
         fromValue.setOnTouchListener(this);
 
         final LinearLayout linearLayout = new LinearLayout(ConverterActivity.this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         final NumberPicker leftNumberPicker = new NumberPicker(ConverterActivity.this);
-        leftNumberPicker.setMaxValue(1000);
+        leftNumberPicker.setMaxValue(9999);
         leftNumberPicker.setMinValue(0);
 
         final TextView dotLabel = new TextView(ConverterActivity.this);
@@ -40,7 +49,7 @@ public class ConverterActivity extends AppCompatActivity implements View.OnTouch
         dotLabel.setTextSize(40);
 
         final NumberPicker rightNumberPicker = new NumberPicker(ConverterActivity.this);
-        rightNumberPicker.setMaxValue(100);
+        rightNumberPicker.setMaxValue(99);
         rightNumberPicker.setMinValue(0);
 
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
@@ -69,6 +78,7 @@ public class ConverterActivity extends AppCompatActivity implements View.OnTouch
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 fromValue.setText(String.valueOf(leftNumberPicker.getValue()) + "." + String.valueOf(rightNumberPicker.getValue()));
+                                calculateResult();
                             }
                         })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -88,6 +98,32 @@ public class ConverterActivity extends AppCompatActivity implements View.OnTouch
 
         alertDialog.show();
         return true;
+    }
+
+    public void switchMode(View view) {
+        if (mode == Mode.MILES_TO_KM) {
+            mode = Mode.KM_TO_MILES;
+            fromLabel.setText("Km");
+            toLabel.setText("Miles");
+        } else {
+            mode = Mode.MILES_TO_KM;
+            fromLabel.setText("Miles");
+            toLabel.setText("Km");
+
+        }
+        calculateResult();
+    }
+
+    private void calculateResult() {
+        if (mode == Mode.MILES_TO_KM) {
+            double vMiles = Double.valueOf(fromValue.getText().toString());
+            double vKm = vMiles / 0.62137;
+            result.setText(formatValue.format(vKm));
+        } else {
+            double vKm = Double.valueOf(fromValue.getText().toString());
+            double vMiles = vKm * 0.62137;
+            result.setText(formatValue.format(vMiles));
+        }
     }
 
 }
